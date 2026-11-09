@@ -1,0 +1,67 @@
+[package]
+name = "windows-daemon"
+version = "1.0.0"
+edition = "2024"
+license = "GPL-3.0-only"
+
+# Shared code (driver module, Android IDs, IPC protocol) lives in the library so both the user-level daemon and the privileged service can use it.
+[lib]
+name = "windroidfs"
+path = "src/lib.rs"
+
+# The user-level daemon, console edition: connects to the phone and prints what happens.
+[[bin]]
+name = "windows-daemon"
+path = "src/main.rs"
+
+# The user-level daemon, everyday edition: a tray icon that mounts phones as they're plugged in.
+[[bin]]
+name = "windroidfs"
+path = "src/bin/windroidfs/main.rs"
+
+# The privileged Windows service: the only process allowed to switch drivers.
+[[bin]]
+name = "windroidfs-service"
+path = "src/bin/windroidfs-service.rs"
+
+[dependencies]
+bytes = "1.12.1"
+dav-server = "0.5.8"
+futures-util = "0.3.34"
+hyper = { version = "0.14", features = ["server", "tcp", "http1"] }
+log = "0.4"
+mdns-sd = "0.21.6"
+prost = "0.14.4"
+rcgen = { version = "0.14", default-features = false, features = ["crypto", "pem", "ring"] }
+rusb = "0.9.4"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+sha2 = "0.10"
+tauri-winrt-notification = "0.8.1"
+tokio = { version = "1.54.1", features = ["full"] }
+tray-icon = "0.26.1"
+windows-service = "0.8.1"
+windows-sys = { version = "0.61.2", features = [
+    "Win32_Foundation",
+    "Win32_Devices_DeviceAndDriverInstallation",
+    "Win32_Devices_Properties",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Networking_WinSock",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Console",
+    "Win32_System_IO",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Pipes",
+    "Win32_System_Registry",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+winfsp = { version = "0.13.2", default-features = false, features = ["delayload"] }
+
+[build-dependencies]
+prost-build = "0.14.4"
+winfsp = { version = "0.13.2", default-features = false, features = ["delayload"] }

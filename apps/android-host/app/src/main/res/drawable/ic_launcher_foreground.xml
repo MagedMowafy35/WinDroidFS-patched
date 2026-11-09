@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Amber folder with a double-headed arrow cut through it (evenOdd), so the arrow stays a hole
+     in the themed (monochrome) icon too. Sized to the largest that fits the 66dp circle every
+     launcher mask keeps: body 52x40 with 6dp corners, tab 6dp tall. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#EF9F27"
+        android:fillType="evenOdd"
+        android:pathData="M33,31
+                          H45
+                          A5,5 0 0 1 50,36
+                          V37
+                          H74
+                          A6,6 0 0 1 80,43
+                          V71
+                          A6,6 0 0 1 74,77
+                          H34
+                          A6,6 0 0 1 28,71
+                          V36
+                          A5,5 0 0 1 33,31
+                          Z
+                          M33,57
+                          L47,45.5
+                          V52
+                          H61
+                          V45.5
+                          L75,57
+                          L61,68.5
+                          V62
+                          H47
+                          V68.5
+                          Z" />
+</vector>
