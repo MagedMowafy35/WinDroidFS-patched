@@ -1,0 +1,44 @@
+name: Build WinDroidFS (Windows)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install Protocol Buffers compiler
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Windows executables
+        working-directory: apps/windows-daemon
+        run: cargo build --release --locked --bins
+
+      - name: Collect executables
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item apps/windows-daemon/target/release/windroidfs.exe dist/
+          Copy-Item apps/windows-daemon/target/release/windows-daemon.exe dist/
+          Copy-Item apps/windows-daemon/target/release/windroidfs-service.exe dist/
+          Compress-Archive -Path dist/* -DestinationPath WinDroidFS-Windows-x64-patched.zip -Force
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WinDroidFS-Windows-x64-patched
+          path: WinDroidFS-Windows-x64-patched.zip
+          if-no-files-found: error
